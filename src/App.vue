@@ -531,7 +531,6 @@ textarea{
    width:40vw;
     height:65vh;
     border: 2px solid black;
-  background:rgb(126, 128, 240);
 }
 
 #priori{
