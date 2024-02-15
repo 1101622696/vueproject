@@ -509,7 +509,7 @@ display:flex;
 gap:2%;
    width:30vw;
     height:24vh;
-    color:black;
+    color:white;
     font-weight: 500;
 }
 #alert{
@@ -530,7 +530,6 @@ textarea{
   align-items: center;
    width:40vw;
     height:65vh;
-    border: 2px solid black;
 }
 
 #priori{
