@@ -558,6 +558,8 @@ table{
 }
 #tabla{
     overflow:scroll;
+      scrollbar-width: none;
+
 }
 
 #botones{
