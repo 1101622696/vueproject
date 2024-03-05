@@ -104,7 +104,7 @@ operacion.value=parseIntnum.value/parseIntnum2.value}
 </script>  -->
 
 
- <!-- <h3 :style="alerta==='Formulario enviado correctamente'?'color:green':''">{{ alerta }}</h3>
+<!-- <h3 :style="alerta==='Formulario enviado correctamente'?'color:green':''">{{ alerta }}</h3>
     <h1>Formulario</h1>
     <form>
       <label for="nombre">Nombre:</label>
@@ -167,11 +167,11 @@ operacion.value=parseIntnum.value/parseIntnum2.value}
 
     </table>  -->
 
-    <!-- <img :src="image" alt="" :style="{borderRadius:num}"> -->
-    <!-- <h1 :style="{borderRadius:12}">hola a todos</h1> -->
-    <!-- <h1 :style="num>18?'color:salmon':'color:green'">mi edad es {{ num }}</h1> -->
+<!-- <img :src="image" alt="" :style="{borderRadius:num}"> -->
+<!-- <h1 :style="{borderRadius:12}">hola a todos</h1> -->
+<!-- <h1 :style="num>18?'color:salmon':'color:green'">mi edad es {{ num }}</h1> -->
 
-  <!-- </div>
+<!-- </div>
 </template> -->
 
 <!-- 
@@ -182,8 +182,8 @@ let color = ref("yellow")
 let image = ref("https://adrianalonso.es/wp-content/uploads/2018/01/vue.jpg") -->
 
 
-<!-- 
-<template>
+ 
+<!-- <template>
   <div>
 <div id="todo">
 
@@ -406,164 +406,202 @@ select {
   padding: 2px;
 } 
 
-</style> -->
+</style> 
+ -->
 
-
-<template>
-    <div id="inicio">
-    <div id="alert">
-    <textarea  v-if="alerta" v-model="alerta"> </textarea>
-<button @click="closealert()" v-show="alerta">cerrar</button>
-</div>
-    <div id=actividad>
-    <label for="actividad">Actividad</label> <input id="act" type="text" v-model.trim="actividad">
-    <label for="prioridad">Prioridad Alta</label > <input id="bot" type="checkbox" v-model="prioridad" >
-    <label for="fecha">Fecha</label > <input id="pri" type="date" placeholder="fecha" v-model="fecha">
-    </div>
-    <div id="botones">
-    <button @click="generar()">+</button> 
-    </div>
-    <div id="botones">
-    <button @click="ordenar()">Ordenar</button> 
-    </div>
-
-<div id="tabla">
-    <table>
-      <thead>
-        <tr>
-          <th>ACTIVIDAD</th>
-          <th>PRIORIDAD</th>
-          <th>FECHA</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, i) in activi" :key="i" :style="item.prio==='alta'?'color:red':'color:white'">
-          <td>{{ item.actividad }}</td>
-          <td>{{ item.prio }}</td>
-          <td>{{ item.fecha }}</td>
-          <td> <button @click="eliminar(i)">❌</button></td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-      </div>
-
-</template>
-
-
+ 
 <script setup>
-import {ref}from "vue" 
-  
-function closealert() {
-  alerta.value=""
+import { ref } from "vue"
+import Swal from 'sweetalert2';
+
+
+let actividad = ref("")
+let activi = ref([])
+let fecha = ref("")
+let prioridad = false
+let prio = ""
+
+function generar() {
+  if (actividad.value === "") {
+    mostrarError("Por favor escriba su actividad");
+    return; // Detener la ejecución si la actividad está vacía
   }
-let actividad=ref("")
-let activi=ref([])
-let fecha=ref("")
-let prioridad=false
-let prio=""
-let alerta=ref("")
+  if (fecha.value === "") {
+    mostrarError("Por favor escriba su fecha");
+    return; // Detener la ejecución si la fecha está vacía
+  }
 
-
-function generar(){
-
-  if (prioridad==true){
-    prio="alta"
-  }else prio="baja"
- activi.value.push({
-  actividad: actividad.value,
-  fecha: fecha.value,
-  prio: prio
-   })       
-if(actividad.value==""){
-alerta.value= "Por favor escriba su actividad"
-}else if(fecha.value==""){
-  alerta.value="Por favor escriba su fecha"
-  } 
-console.log(activi.value)
+  let prio = prioridad ? "alta" : "baja";
+  
+  activi.value.push({
+    actividad: actividad.value,
+    fecha: fecha.value,
+    prio: prio
+  });
+  
+  console.log(activi.value);
 }
 
-function ordenar(){
-return activi.value.sort((a,b)=>{
-  if(a.prio==="alta")return -1;
-  if(b.prio==="alta")return 1;
-  return 0;
-})
+function ordenar() {
+  return activi.value.sort((a, b) => {
+    if (a.prio === "alta") return -1;
+    if (b.prio === "alta") return 1;
+    return 0;
+  })
 }
 
-function eliminar(i){
-  activi.value.splice(i,1)
+function eliminar(i) {
+  activi.value.splice(i, 1)
 }
+
+function mostrarError(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: mensaje,
+    text: "Vuelve e intenta!",
+  });
+}
+
 
 </script>
 
 
+<template>
+  <div id="inicio">
+
+    <div id=actividad>
+      <label for="actividad">Actividad</label> <input id="act" type="text" v-model.trim="actividad">
+      <label for="prioridad">Prioridad Alta</label> <input id="bot" type="checkbox" v-model="prioridad">
+      <label for="fecha">Fecha</label> <input id="pri" type="date" placeholder="fecha" v-model="fecha">
+    </div>
+    <div id="botones">
+      <button id="generar" @click="generar()">+</button>
+    </div>
+    <div id="botones">
+      <button id="ordenar" @click="ordenar()">Ordenar</button>
+    </div>
+
+    <div id="tabla">
+      <table>
+        <thead>
+          <tr>
+            <th>ACTIVIDAD</th>
+            <th>PRIORIDAD</th>
+            <th>FECHA</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, i) in activi" :key="i" :style="item.prio === 'alta' ? 'color:red' : 'color:white'">
+            <td>{{ item.actividad }}</td>
+            <td>{{ item.prio }}</td>
+            <td>{{ item.fecha }}</td>
+            <td> <button id="elimina" @click="eliminar(i)">❌</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+</template>
+
+
 <style coped>
-
-#actividad{
-display:flex;
+#actividad {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-gap:2%;
-   width:30vw;
-    height:24vh;
-    color:white;
-    font-weight: 500;
+  gap: 2%;
+  width: 30vw;
+  height: 24vh;
+  color: white;
+  font-weight: 500;
+  box-sizing: border-box;
+  width:70%;
+  height: 40%;
 }
-#alert{
-  position: absolute;
-  width:17vw;
-  height:8vh;
-}
-textarea{
-  background:rgb(206, 65, 65);
-  padding: 4%;
-  font-size: large;
-}
-#inicio{
-  display:flex;
+
+#inicio {
+  display: flex;
   flex-direction: column;
-  gap:4%;
+  gap: 4%;
   justify-content: center;
   align-items: center;
-   width:40vw;
-    height:65vh;
+  width: 40vw;
+  height: 85vh;
+  background-color: rgb(219, 179, 125);
 }
 
-#priori{
-  width:30px;
-  height:20px;
+#priori {
+  width: 30px;
+  height: 20px;
 }
-#bot{
-  width:2vw;
-  height: 5vh;
+
+#bot {
+  width: 2vw;
+  height: 8vh;
 }
-#act{
-  width:80%;
+
+#act {
+  width: 80%;
   font-size: large;
-    height:4vh;
+  height: 4vh;
+  background-color: rgb(217, 226, 226);
+  color:black
 }
 
-#pri{
-    width:10vw;
-    height:3vh;
+#pri {
+  width: 17vw;
+  height: 8vh;
+  background-color: rgb(217, 226, 226);
+  color:black
 }
 
+
+
+#botones {
+  width: 9vw;
+  height: 6vh;
+}
+
+#generar{
+  background-color: rgb(223, 137, 66);
+color:red;
+font-size: medium;
+font-weight: 800;
+}
+
+#ordenar{
+  background-color: rgb(223, 137, 66);
+}
+table {
+  width: 35vw;
+  height: 20vh;
+}
+
+#tabla {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+th{
+  background-color: rgb(184, 136, 73);
+  padding: 2%;
+}
 table{
-    width:25vw;
-    height:20vh;
-
-}
-#tabla{
-    overflow:scroll;
-      scrollbar-width: none;
-
+  border-collapse: collapse;
 }
 
-#botones{
-    width:9vw;
-    height:6vh;
+td{
+  background-color: rgb(235, 172, 129);
+  padding: 5px;
 }
-</style>
+#elimina{
+  background-color: rgb(190, 235, 220);
+}
+
+td:hover{
+  background-color: rgb(238, 174, 91);
+}
+</style> 
